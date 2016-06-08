@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>markds</title>
+	<!-- highlight.js  样式 -->
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/obsidian.min.css">
+	<link rel="stylesheet" type="text/css" href="./markds.css">
+	<style type="text/css">
+		{{style}}
+	</style>
+</head>
+<body>
+			<div class="debugger" :class="{ 'debugger-active': show }">
+				<textarea class="debugger-style" v-model="style" debounce="300"></textarea>
+				<div class="debugger-html">
+					{{input | marked}}
+				</div>
+				<div class="debugger-handler" v-on:click="switch">
+					<div class="iconfont">&#xe604;</div>
+				</div>
+			</div>
+			<div class="editor">
+				<textarea class="editor-input" v-model="input" debounce="300"></textarea>
+				<div id="output" class="editor-output" v-html="input | marked"></div>
+			</div>
+		  	
+			<!-- https://github.com/isagalaev/highlight.js -->
+			<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+		    <!-- 来自 https://github.com/chjj/marked.git -->
+		    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+		    <!-- 最新的 vue JavaScript 文件 -->
+		    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+
+		    <script type="text/javascript">
+		    	new Vue({
+		    		el: 'html',
+		    		data: {
+			    		input: '# hello ',
+			    		style: 'h1, h2, h3, h4, h5 {color: #168A16;}',
+			    		show: false
+		    		},
+		    		filters: {
+		    			marked: marked
+		    		},
+		    		init: function() {
+		    			// var renderer = new marked.Renderer()
+		    			// renderer.codespan = function (code) {
+		    			// 	return '<code class="codespan">' + code + '</code>'
+		    			// }
+		    			marked.setOptions({
+  							highlight: function (code) {
+    							return hljs.highlightAuto(code).value;
+  							}
+						});
+		    		},
+		    		methods: {
+		    			switch: function (event) {
+		    				this.show = !this.show
+		    			}
+		    		}
+		    	})
+		    </script>
+</body>
+</html>
